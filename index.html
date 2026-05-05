@@ -1,543 +1,682 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alperen Arslan</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-  :root {
-    --bg: #0a0d12;
-    --surface: #111520;
-    --surface2: #161c2a;
-    --border: #1e2d45;
-    --border2: #243550;
-    --accent: #00d4ff;
-    --accent2: #0090cc;
-    --accent-dim: rgba(0,212,255,0.08);
-    --accent-dim2: rgba(0,212,255,0.15);
-    --text: #e8f0fe;
-    --text2: #8899b4;
-    --text3: #4a5c78;
-    --green: #00ff9d;
-    --green-dim: rgba(0,255,157,0.08);
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Space Grotesk', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alperen Arslan — FPGA & Embedded Systems Engineer</title>
 
-  /* Grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.3;
-    pointer-events: none;
-    z-index: 0;
-  }
+  <!--
+  ════════════════════════════════════════════════════════════════════
+   SAYFA YAPISI (içindekiler — Ctrl+F ile bölüme atla)
+  ════════════════════════════════════════════════════════════════════
+   [01] HEAD          — Tailwind CDN + config
+   [02] STYLES        — Özel CSS (bento kart, animasyonlar, scrollbar)
+   [03] NAVBAR        — Üst menü + dil değiştirme butonu
+   [04] HERO          — İsim, ünvan, açıklama, müsait badge, CTA
+   [05] STATS         — Konum + Odak alanı kartları
+   [06] SKILLS        — Yetkinlik chip'leri
+   [07] EXPERIENCE    — Deneyim timeline'ı
+   [08] EDUCATION     — Eğitim kartı
+   [09] PROJECTS      — Proje kartları (3 adet)
+   [10] CONTACT       — E-posta + Telefon
+   [11] CV CARD       — CV indirme kartı
+   [12] FOOTER        — Telif satırı
+   [13] CONFIG        — Tek yerden değiştirilen veri (CV yolu, kişi bilgileri)
+   [14] I18N          — TR/EN çeviri sözlüğü
+   [15] APP LOGIC     — Dil değiştirme + yıl yazma
+  ════════════════════════════════════════════════════════════════════
+  -->
 
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 48px 24px;
-  }
+  <!-- ════════════════════════════════════════════════════════════════
+       [01] HEAD — Tailwind CDN + config
+       ════════════════════════════════════════════════════════════════ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['SF Mono', 'JetBrains Mono', 'Menlo', 'monospace'],
+          },
+          colors: {
+            ink: {
+              900: '#0a0a0a',
+              800: '#111113',
+              700: '#17171a',
+              600: '#1f1f23',
+              500: '#2a2a30',
+            }
+          }
+        }
+      }
+    }
+  </script>
 
-  /* Lang toggle */
-  .lang-toggle {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 32px;
-    gap: 4px;
-  }
-  .lang-btn {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    padding: 6px 14px;
-    border: 1px solid var(--border2);
-    background: transparent;
-    color: var(--text2);
-    cursor: pointer;
-    letter-spacing: 0.08em;
-    transition: all 0.2s;
-    border-radius: 3px;
-  }
-  .lang-btn.active {
-    background: var(--accent-dim2);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  <!-- ════════════════════════════════════════════════════════════════
+       [02] STYLES — Özel CSS
+       ════════════════════════════════════════════════════════════════ -->
+  <style>
+    /* ----- Genel ----- */
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(16, 185, 129, 0.08), transparent 60%),
+        #0a0a0a;
+      background-attachment: fixed;
+    }
 
-  /* Header */
-  .header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 32px;
-    margin-bottom: 48px;
-  }
-  .header-left { flex: 1; }
-  .tag-line {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .tag-line::before {
-    content: '';
-    width: 24px;
-    height: 1px;
-    background: var(--accent);
-    display: inline-block;
-  }
-  h1 {
-    font-family: var(--mono);
-    font-size: clamp(32px, 6vw, 52px);
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    margin-bottom: 8px;
-  }
-  h1 span { color: var(--accent); }
-  .title-role {
-    font-family: var(--sans);
-    font-size: 14px;
-    color: var(--text2);
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    margin-top: 10px;
-  }
+    /* ----- Bento kart ----- */
+    .bento-card {
+      background: linear-gradient(135deg, rgba(31, 31, 35, 0.85) 0%, rgba(17, 17, 19, 0.85) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .bento-card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.5);
+    }
 
-  /* Availability badge */
-  .avail {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 16px;
-    padding: 6px 12px;
-    background: var(--green-dim);
-    border: 1px solid rgba(0,255,157,0.25);
-    border-radius: 3px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--green);
-    letter-spacing: 0.06em;
-  }
-  .avail-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
+    /* ----- Skill chip ----- */
+    .skill-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+    }
+    .skill-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
 
-  /* Divider */
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, var(--accent) 0%, var(--border) 60%, transparent 100%);
-    margin: 40px 0;
-    opacity: 0.4;
-  }
+    /* ----- Müsait nabız ----- */
+    .live-dot {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+      animation: livePulse 2s infinite;
+    }
+    @keyframes livePulse {
+      0%   { box-shadow: 0 0 0 0   rgba(34, 197, 94, 0.7); }
+      70%  { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0   rgba(34, 197, 94, 0); }
+    }
 
-  /* Skills chips */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 40px;
-  }
-  .chip {
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 5px 12px;
-    border: 1px solid var(--border2);
-    background: var(--surface);
-    color: var(--text2);
-    border-radius: 3px;
-    letter-spacing: 0.06em;
-    cursor: default;
-    transition: all 0.2s;
-  }
-  .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-  .chip.hl { border-color: var(--accent2); color: var(--accent); background: var(--accent-dim); }
+    /* ----- Gradient başlık ----- */
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #34d399 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-  /* Main grid */
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    /* ----- Hero arka plan grid ----- */
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px 22px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .card:hover { border-color: var(--border2); }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .card:hover::before { opacity: 0.6; }
+    /* ----- Seçim + scrollbar ----- */
+    ::selection { background: rgba(99, 102, 241, 0.4); color: #fff; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a3a40; }
 
-  .card-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .card-label::before {
-    content: '';
-    width: 3px; height: 3px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  /* Contact card */
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-  .contact-item:last-child { border-bottom: none; padding-bottom: 0; }
-  .contact-item:hover .contact-val { color: var(--accent); }
-  .contact-icon {
-    width: 30px; height: 30px;
-    background: var(--accent-dim);
-    border: 1px solid var(--border2);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .contact-icon svg { width: 14px; height: 14px; fill: none; stroke: var(--accent); stroke-width: 1.5; }
-  .contact-val {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text2);
-    transition: color 0.15s;
-    word-break: break-all;
-  }
-
-  /* Experience items */
-  .exp-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .exp-item:last-child { border-bottom: none; }
-  .exp-role {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    line-height: 1.3;
-  }
-  .exp-co {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text2);
-    margin-top: 2px;
-  }
-  .exp-date {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text3);
-    white-space: nowrap;
-    margin-left: 12px;
-    flex-shrink: 0;
-  }
-
-  /* Projects */
-  .proj-item {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .proj-item:last-child { border-bottom: none; }
-  .proj-name {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
-  .proj-desc {
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.5;
-  }
-
-  /* Wide card */
-  .card-wide {
-    grid-column: 1 / -1;
-  }
-
-  /* CV Download */
-  .cv-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--bg);
-    background: var(--accent);
-    padding: 12px 28px;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: all 0.2s;
-    border: none;
-    cursor: pointer;
-    margin-top: 8px;
-  }
-  .cv-btn:hover { background: #33ddff; transform: translateY(-1px); }
-  .cv-btn svg { width: 14px; height: 14px; fill: none; stroke: var(--bg); stroke-width: 2; }
-
-  /* Footer */
-  .footer {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .footer-sig {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text3);
-  }
-  .footer-sig span { color: var(--accent); }
-
-  /* Hidden lang content */
-  [data-lang] { display: none; }
-  .lang-en [data-lang="en"] { display: block; }
-  .lang-tr [data-lang="tr"] { display: block; }
-  .lang-en [data-lang-inline="en"],
-  .lang-tr [data-lang-inline="tr"] { display: inline; }
-  [data-lang-inline] { display: none; }
-</style>
+    /* ----- Debug modu (body.debug eklersen kart sınırları görünür) ----- */
+    body.debug section { outline: 1px dashed rgba(99, 102, 241, 0.5); outline-offset: 4px; }
+    body.debug .bento-card { outline: 1px dashed rgba(34, 197, 94, 0.4); }
+  </style>
 </head>
-<body class="lang-en">
-<div class="container">
 
-  <!-- Lang Toggle -->
-  <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('tr')">TR</button>
-  </div>
+<body class="font-sans text-neutral-200 antialiased min-h-screen">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-left">
-      <div class="tag-line">
-        <span data-lang-inline="en">Electrical & Electronics Engineer</span>
-        <span data-lang-inline="tr">Elektrik & Elektronik Mühendisi</span>
-      </div>
-      <h1>Alperen<br><span>Arslan</span></h1>
-      <div class="title-role">
-        <span data-lang-inline="en">FPGA · Embedded Systems · Quantum Communication</span>
-        <span data-lang-inline="tr">FPGA · Gömülü Sistemler · Kuantum İletişim</span>
-      </div>
-      <div class="avail">
-        <div class="avail-dot"></div>
-        <span data-lang-inline="en">Available for freelance & full-time</span>
-        <span data-lang-inline="tr">Freelance & tam zamanlı müsait</span>
+  <!-- ════════════════════════════════════════════════════════════════
+       [03] NAVBAR — Üst menü + dil butonu
+       ════════════════════════════════════════════════════════════════ -->
+  <nav id="navbar" class="sticky top-0 z-50 backdrop-blur-xl bg-ink-900/60 border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center font-bold text-white text-sm">A</div>
+        <span class="font-semibold text-white tracking-tight">Alperen Arslan</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="#section-contact" class="hidden sm:inline-flex items-center text-sm text-neutral-400 hover:text-white transition px-3 py-1.5" data-i18n="nav.contact">İletişim</a>
+        <button id="langToggle" class="text-xs font-semibold text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1.5 transition-all">
+          <span id="langLabel">EN</span>
+        </button>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <!-- Skills -->
-  <div class="chips">
-    <div class="chip hl">Verilog / VHDL</div>
-    <div class="chip hl">Vivado · Vitis HLS</div>
-    <div class="chip hl">Zynq SoC</div>
-    <div class="chip">AXI · AXI-Lite · AXI-Stream</div>
-    <div class="chip">C / C++</div>
-    <div class="chip">STM32</div>
-    <div class="chip">Altium Designer</div>
-    <div class="chip">QKD Systems</div>
-    <div class="chip">Python</div>
-    <div class="chip">KiCad</div>
-    <div class="chip">LTSpice</div>
-    <div class="chip">Git</div>
-  </div>
+  <main id="top" class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
 
-  <div class="divider"></div>
+    <!-- ════════════════════════════════════════════════════════════════
+         [04] + [05] HERO + STATS
+         ════════════════════════════════════════════════════════════════ -->
+    <section id="section-hero" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
-  <!-- Main grid -->
-  <div class="grid">
+      <!-- ----- [04] HERO kartı ----- -->
+      <div class="bento-card rounded-3xl p-6 sm:p-8 md:col-span-2 relative overflow-hidden">
+        <div class="absolute inset-0 grid-pattern opacity-40 pointer-events-none"></div>
+        <div class="relative">
+          <!-- Müsait badge -->
+          <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-3 py-1 mb-6">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 live-dot"></span>
+            <span class="text-xs font-medium text-emerald-300" data-i18n="hero.available">Yeni fırsatlara açığım</span>
+          </div>
 
-    <!-- Contact -->
-    <div class="card">
-      <div class="card-label" data-lang="en">Contact</div>
-      <div class="card-label" data-lang="tr">İletişim</div>
+          <!-- İsim -->
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight gradient-text mb-3 leading-[1.05]">
+            Alperen Arslan
+          </h1>
 
-      <a class="contact-item" href="mailto:aa.alperenarsslann@gmail.com">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+          <!-- Ünvan -->
+          <p class="text-base sm:text-lg text-indigo-300 font-medium mb-4" data-i18n="hero.title">
+            FPGA &amp; Embedded Systems Engineer
+          </p>
+
+          <!-- Açıklama -->
+          <p class="text-neutral-400 text-sm sm:text-base leading-relaxed max-w-xl" data-i18n="hero.desc">
+            Uydu tabanlı kuantum anahtar dağıtımı (QKD), yüksek hızlı dijital tasarım ve gömülü sistemler üzerine çalışıyorum. Verilog/VHDL ile RTL tasarımı, Zynq SoC entegrasyonu ve C++ ile zaman damgası işleme alanlarında deneyimliyim.
+          </p>
+
+          <!-- CTA butonları -->
+          <div class="flex flex-wrap gap-3 mt-7">
+            <a id="hero-cv-btn" href="#section-cv" class="inline-flex items-center gap-2 bg-white text-black font-semibold rounded-full px-5 py-2.5 text-sm hover:bg-neutral-200 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+              <span data-i18n="hero.cv">CV İndir</span>
+            </a>
+            <a href="#section-contact" class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium rounded-full px-5 py-2.5 text-sm transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <span data-i18n="hero.contact">İletişime Geç</span>
+            </a>
+          </div>
         </div>
-        <span class="contact-val">aa.alperenarsslann@gmail.com</span>
-      </a>
-      <a class="contact-item" href="tel:+905356280288">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.38 2 2 0 0 1 3.55 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91A16 16 0 0 0 15.09 16l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <span class="contact-val">+90 535 628 02 88</span>
-      </a>
-      <a class="contact-item" href="https://www.linkedin.com/in/alperen-arslan-4a157119b/" target="_blank">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        </div>
-        <span class="contact-val">https://www.linkedin.com/in/alperen-arslan-4a157119b/</span>
-      </a>
-      <a class="contact-item" href="https://github.com/alperenarsslann" target="_blank">
-        <div class="contact-icon">
-          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </div>
-        <span class="contact-val">https://github.com/alperenarsslann</span>
-      </a>
-    </div>
+      </div>
 
-    <!-- Experience -->
-    <div class="card">
-      <div class="card-label" data-lang="en">Experience</div>
-      <div class="card-label" data-lang="tr">Deneyim</div>
+      <!-- ----- [05] STATS kartları ----- -->
+      <div class="grid grid-cols-2 md:grid-cols-1 gap-4">
+        <div class="bento-card rounded-3xl p-5 flex flex-col justify-between">
+          <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold" data-i18n="stat.location">Konum</div>
+          <div class="mt-3">
+            <div class="text-xl sm:text-2xl font-bold text-white">Istanbul</div>
+            <div class="text-sm text-neutral-400" data-i18n="stat.locationSub">Türkiye / Remote</div>
+          </div>
+        </div>
+        <div class="bento-card rounded-3xl p-5 flex flex-col justify-between">
+          <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold" data-i18n="stat.focus">Odak Alanı</div>
+          <div class="mt-3">
+            <div class="text-xl sm:text-2xl font-bold text-white">Satellite QKD</div>
+            <div class="text-sm text-neutral-400">FPGA · ASIC · RTL</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <div class="exp-item">
+    <!-- ════════════════════════════════════════════════════════════════
+         [06] SKILLS — Yetkinlik chip'leri
+         Yeni skill eklemek için: aşağıdaki <span> bloklarından birini kopyala
+         ════════════════════════════════════════════════════════════════ -->
+    <section id="section-skills" class="grid grid-cols-1 gap-4 mb-4">
+      <div class="bento-card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold mb-1" data-i18n="skills.label">Teknolojiler</div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight" data-i18n="skills.title">Yetkinlikler</h2>
+          </div>
+          <div class="hidden sm:flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20">
+            <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+        </div>
+
+        <div id="skills-list" class="flex flex-wrap gap-2">
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">Verilog / VHDL</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">Vivado</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">Vitis HLS</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">Zynq SoC</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">AXI</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">C / C++</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">STM32</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">Altium Designer</span>
+          <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">QKD Systems Chips</span>
+          <!-- Yeni skill ekle: <span class="skill-chip rounded-full px-4 py-2 text-sm font-medium text-neutral-100">Yeni Skill</span> -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         [07] + [08] EXPERIENCE + EDUCATION
+         ════════════════════════════════════════════════════════════════ -->
+    <section id="section-experience" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+
+      <!-- ----- [07] EXPERIENCE timeline ----- -->
+      <div class="bento-card rounded-3xl p-6 sm:p-8 md:col-span-2">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold mb-1" data-i18n="exp.label">Kariyer</div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight" data-i18n="exp.title">Deneyim</h2>
+          </div>
+          <div class="hidden sm:flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+        </div>
+
+        <ol id="experience-list" class="relative border-l border-white/10 ml-2 space-y-6">
+
+          <!-- Deneyim öğesi #1 -->
+          <li class="pl-6 relative">
+            <span class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-indigo-400 ring-4 ring-indigo-500/20"></span>
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+              <h3 class="text-lg font-semibold text-white">Qubitrium</h3>
+              <span class="text-xs font-mono text-neutral-500">2023 — 2026</span>
+            </div>
+            <p class="text-sm text-indigo-300 mt-0.5" data-i18n="exp.qubitrium.role">FPGA / Embedded Engineer · Satellite QKD</p>
+            <p class="text-sm text-neutral-400 mt-2 leading-relaxed" data-i18n="exp.qubitrium.desc">Uydu QKD platformu için RTL tasarımı, zaman damgası işleme ve gömülü yazılım geliştirme.</p>
+          </li>
+
+          <!-- Deneyim öğesi #2 -->
+          <li class="pl-6 relative">
+            <span class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-emerald-400 ring-4 ring-emerald-500/20"></span>
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+              <h3 class="text-lg font-semibold text-white">TÜBİTAK KUANT-ÜS</h3>
+              <span class="text-xs font-mono text-neutral-500" data-i18n="exp.tubitak.period">Proje</span>
+            </div>
+            <p class="text-sm text-emerald-300 mt-0.5" data-i18n="exp.tubitak.role">Araştırma · Kuantum İletişim</p>
+            <p class="text-sm text-neutral-400 mt-2 leading-relaxed" data-i18n="exp.tubitak.desc">Türkiye'nin uydu tabanlı kuantum iletişim altyapısına yönelik AR-GE çalışmaları.</p>
+          </li>
+
+          <!-- Deneyim öğesi #3 -->
+          <li class="pl-6 relative">
+            <span class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-fuchsia-400 ring-4 ring-fuchsia-500/20"></span>
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+              <h3 class="text-lg font-semibold text-white">D-Orbit · TNO</h3>
+              <span class="text-xs font-mono text-neutral-500" data-i18n="exp.collab.period">İşbirliği</span>
+            </div>
+            <p class="text-sm text-fuchsia-300 mt-0.5" data-i18n="exp.collab.role">Uluslararası Uzay Teknolojileri Ortakları</p>
+            <p class="text-sm text-neutral-400 mt-2 leading-relaxed" data-i18n="exp.collab.desc">QKD payload entegrasyonu ve doğrulama testleri kapsamında ortak çalışma.</p>
+          </li>
+
+          <!-- Yeni deneyim eklemek için yukarıdaki <li> bloğunu kopyala -->
+        </ol>
+      </div>
+
+      <!-- ----- [08] EDUCATION kartı ----- -->
+      <div id="section-education" class="bento-card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold mb-1" data-i18n="edu.label">Akademik</div>
+            <h2 class="text-2xl font-bold text-white tracking-tight" data-i18n="edu.title">Eğitim</h2>
+          </div>
+          <div class="hidden sm:flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-base font-semibold text-white" data-i18n="edu.uni">Özyeğin Üniversitesi</h3>
+          <p class="text-sm text-neutral-400" data-i18n="edu.dept">Elektrik-Elektronik Mühendisliği</p>
+          <p class="text-xs font-mono text-neutral-500 mt-1">2019 — 2024</p>
+        </div>
+        <div class="mt-5 pt-5 border-t border-white/5">
+          <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold mb-2" data-i18n="edu.thesis">Mezuniyet Tezi</div>
+          <p class="text-sm text-neutral-300">TDC ASIC Design</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         [09] PROJECTS — Proje kartları
+         Yeni proje ekleme: bir <article> bloğunu kopyala
+         ════════════════════════════════════════════════════════════════ -->
+    <section id="section-projects" class="mb-4">
+      <div class="mb-4">
+        <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold mb-1" data-i18n="proj.label">Seçilmiş İşler</div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight" data-i18n="proj.title">Projeler</h2>
+      </div>
+
+      <div id="projects-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- Proje #1: PURPLE NECTAR -->
+        <article class="bento-card rounded-3xl p-6 group">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-500/30 to-fuchsia-500/20 border border-purple-500/30 flex items-center justify-center">
+              <svg class="w-5 h-5 text-fuchsia-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-purple-300 bg-purple-500/10 border border-purple-500/20 rounded-full px-2 py-1">C++</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1.5">PURPLE NECTAR</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed" data-i18n="proj.purple">QKD sistemleri için yüksek hassasiyetli zaman damgası işleme C++ framework'ü.</p>
+          <div class="mt-4 flex flex-wrap gap-1.5">
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">Timestamp</span>
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">QKD</span>
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">Framework</span>
+          </div>
+        </article>
+
+        <!-- Proje #2: TDC ASIC -->
+        <article class="bento-card rounded-3xl p-6 group">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/30 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center">
+              <svg class="w-5 h-5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-2 py-1">ASIC</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1.5">TDC ASIC</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed" data-i18n="proj.tdc">Mezuniyet tezi: Time-to-Digital Converter ASIC tasarımı ve doğrulaması.</p>
+          <div class="mt-4 flex flex-wrap gap-1.5">
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">TDC</span>
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">VLSI</span>
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5" data-i18n="proj.tag.thesis">Tez</span>
+          </div>
+        </article>
+
+        <!-- Proje #3: AES-256 on Zynq -->
+        <article class="bento-card rounded-3xl p-6 group">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500/30 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center">
+              <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-1">Verilog</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1.5">AES-256 on Zynq</h3>
+          <p class="text-sm text-neutral-400 leading-relaxed" data-i18n="proj.aes">Zynq SoC üzerinde donanımsal AES-256 şifreleme RTL implementasyonu.</p>
+          <div class="mt-4 flex flex-wrap gap-1.5">
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">RTL</span>
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">Zynq</span>
+            <span class="text-[11px] text-neutral-400 bg-white/5 rounded-md px-2 py-0.5">Crypto</span>
+          </div>
+        </article>
+
+        <!-- Yeni proje eklemek için yukarıdaki <article> bloğunu kopyala -->
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         [10] + [11] CONTACT + CV
+         ════════════════════════════════════════════════════════════════ -->
+    <section id="section-contact" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+
+      <!-- ----- [10] CONTACT kartı ----- -->
+      <div class="bento-card rounded-3xl p-6 sm:p-8 md:col-span-2 relative overflow-hidden">
+        <div class="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
+        <div class="relative">
+          <div class="text-xs uppercase tracking-widest text-neutral-500 font-semibold mb-1" data-i18n="contact.label">İletişim</div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2" data-i18n="contact.title">Birlikte çalışalım.</h2>
+          <p class="text-neutral-400 text-sm sm:text-base leading-relaxed mb-6 max-w-md" data-i18n="contact.desc">FPGA, gömülü sistem veya kuantum iletişim alanlarında bir projeniz mi var? Mesaj atmaktan çekinmeyin.</p>
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            <!-- E-posta -->
+            <a id="contact-email-link" href="mailto:aa.alperenarsslann@gmail.com" class="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl px-4 py-3 transition flex-1 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[11px] uppercase tracking-wider text-neutral-500 font-semibold" data-i18n="contact.email">E-posta</div>
+                <div id="contact-email-text" class="text-sm text-white font-medium truncate">aa.alperenarsslann@gmail.com</div>
+              </div>
+            </a>
+
+            <!-- Telefon -->
+            <a id="contact-phone-link" href="tel:+905356280288" class="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl px-4 py-3 transition flex-1 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[11px] uppercase tracking-wider text-neutral-500 font-semibold" data-i18n="contact.phone">Telefon</div>
+                <div id="contact-phone-text" class="text-sm text-white font-medium">+90 535 628 02 88</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ----- [11] CV indirme kartı ----- -->
+      <div id="section-cv" class="bento-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between bg-gradient-to-br from-indigo-500/10 via-ink-700 to-emerald-500/10">
         <div>
-          <div class="exp-role" data-lang="en">Digital Design / R&D Engineer</div>
-          <div class="exp-role" data-lang="tr">Dijital Tasarım / Ar-Ge Mühendisi</div>
-          <div class="exp-co">Qubitrium</div>
+          <div class="text-xs uppercase tracking-widest text-neutral-400 font-semibold mb-1" data-i18n="cv.label">Belge</div>
+          <h2 class="text-2xl font-bold text-white tracking-tight" data-i18n="cv.title">CV</h2>
+          <p class="text-sm text-neutral-400 mt-2 leading-relaxed" data-i18n="cv.desc">Tüm deneyim, projeler ve yetkinliklerin bulunduğu detaylı PDF.</p>
         </div>
-        <div class="exp-date">2023–2026</div>
-      </div>
-      <div class="exp-item">
-        <div>
-          <div class="exp-role" data-lang="en">FPGA Firmware — Satellite QKD</div>
-          <div class="exp-role" data-lang="tr">FPGA Firmware — Uydu QKD</div>
-          <div class="exp-co">TÜBİTAK KUANT-ÜS · D-Orbit · TNO</div>
-        </div>
-        <div class="exp-date">Artix-7</div>
-      </div>
-      <div class="exp-item">
-        <div>
-          <div class="exp-role" data-lang="en">BSc — Electrical & Electronics Eng.</div>
-          <div class="exp-role" data-lang="tr">Lisans — Elektrik & Elektronik Müh.</div>
-          <div class="exp-co">Özyeğin University · Quantum-Optics Lab</div>
-        </div>
-        <div class="exp-date">2019–2024</div>
-      </div>
-    </div>
-
-    <!-- Projects -->
-    <div class="card">
-      <div class="card-label" data-lang="en">Key Projects</div>
-      <div class="card-label" data-lang="tr">Öne Çıkan Projeler</div>
-
-      <div class="proj-item">
-        <div class="proj-name">PURPLE NECTAR</div>
-        <div class="proj-desc" data-lang="en">C++ timestamp framework for satellite QKD systems (D-Orbit, TNO)</div>
-        <div class="proj-desc" data-lang="tr">Uydu QKD sistemleri için C++ zaman damgalama altyapısı</div>
-      </div>
-      <div class="proj-item">
-        <div class="proj-name">TDC ASIC (Dissertation)</div>
-        <div class="proj-desc" data-lang="en">Time-to-Digital Converter ASIC design — Quantum-Optics Lab</div>
-        <div class="proj-desc" data-lang="tr">Kuantum-Optik Lab — Zaman-Dijital Dönüştürücü ASIC tasarımı</div>
-      </div>
-      <div class="proj-item">
-        <div class="proj-name">AES-256 on Zynq</div>
-        <div class="proj-desc" data-lang="en">Hardware crypto — CTR mode, pure Verilog RTL, ZYBO Z7-20</div>
-        <div class="proj-desc" data-lang="tr">Donanım şifreleme — CTR modu, Verilog RTL, ZYBO Z7-20</div>
-      </div>
-    </div>
-
-    <!-- CV Download -->
-    <div class="card">
-      <div class="card-label" data-lang="en">Resume / CV</div>
-      <div class="card-label" data-lang="tr">Özgeçmiş / CV</div>
-      <div style="padding: 8px 0 12px;">
-        <p style="font-size:13px; color:var(--text2); line-height:1.6; margin-bottom:16px;" data-lang="en">Download the full resume including all projects, publications, and technical skills.</p>
-        <p style="font-size:13px; color:var(--text2); line-height:1.6; margin-bottom:16px;" data-lang="tr">Tüm projeleri, yayınları ve teknik becerileri içeren tam özgeçmişi indirin.</p>
-        <a class="cv-btn" href="Alperen_Arslan_Cv.pdf" target="_blank" download>
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span data-lang-inline="en">Download CV</span>
-          <span data-lang-inline="tr">CV İndir</span>
+        <!-- href + download CONFIG.cvFile üzerinden script tarafından doldurulur -->
+        <a id="cv-download-btn" href="Alperen_Arslan_Cv.pdf" download="Alperen_Arslan_Cv.pdf" class="mt-6 inline-flex items-center justify-center gap-2 bg-white text-black font-semibold rounded-2xl px-5 py-3 text-sm hover:bg-neutral-200 transition w-full">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          <span data-i18n="cv.button">PDF İndir</span>
         </a>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <!-- ════════════════════════════════════════════════════════════════
+         [12] FOOTER
+         ════════════════════════════════════════════════════════════════ -->
+    <footer id="section-footer" class="text-center text-xs text-neutral-600 mt-12 pb-6">
+      <p>&copy; <span id="footer-year"></span> Alperen Arslan · <span data-i18n="footer.text">Tüm hakları saklıdır.</span></p>
+    </footer>
 
-  <!-- Footer -->
-  <div class="footer">
-    <div class="footer-sig">
-      <span>aa.alperenarsslann@gmail.com</span> · <span style="color:var(--text3)">FPGA · Embedded · QKD</span>
-    </div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);">
-      <span style="color:var(--accent);">■</span> Istanbul, TR · 2026
-    </div>
-  </div>
+  </main>
 
-</div>
+  <!-- ════════════════════════════════════════════════════════════════
+       [13] CONFIG — Tek noktadan değiştirilebilir veriler
+       Düzenlemeden önce burayı değiştir; aşağı kayman gerekmez.
+       ════════════════════════════════════════════════════════════════ -->
+  <script>
+    /* eslint-disable */
+    const CONFIG = {
+      cvFile:    'Alperen_Arslan_Cv.pdf',                  // PDF dosyasının adı (aynı klasörde)
+      cvSaveAs:  'Alperen_Arslan_CV.pdf',                  // İndirme dialog'unda görünecek isim
+      email:     'aa.alperenarsslann@gmail.com',
+      phone:     '+90 535 628 02 88',
+      phoneRaw:  '+905356280288',                          // tel: linki için
+      defaultLang: 'tr',                                   // 'tr' veya 'en'
+      debug:     false                                     // true yaparsan kart sınırları görünür + console log artar
+    };
+  </script>
 
-<script>
-function setLang(lang) {
-  document.body.className = 'lang-' + lang;
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent === lang.toUpperCase());
-  });
-}
-</script>
+  <!-- ════════════════════════════════════════════════════════════════
+       [14] I18N — TR/EN sözlüğü
+       Yeni metin eklerken: HTML'de data-i18n="x.y" kullan,
+       buraya tr ve en bloklarına aynı anahtarı ekle.
+       ════════════════════════════════════════════════════════════════ -->
+  <script>
+    const I18N = {
+      tr: {
+        'nav.contact':         'İletişim',
+        'hero.available':      'Yeni fırsatlara açığım',
+        'hero.title':          'FPGA & Embedded Systems Engineer',
+        'hero.desc':           'Uydu tabanlı kuantum anahtar dağıtımı (QKD), yüksek hızlı dijital tasarım ve gömülü sistemler üzerine çalışıyorum. Verilog/VHDL ile RTL tasarımı, Zynq SoC entegrasyonu ve C++ ile zaman damgası işleme alanlarında deneyimliyim.',
+        'hero.cv':             'CV İndir',
+        'hero.contact':        'İletişime Geç',
+        'stat.location':       'Konum',
+        'stat.locationSub':    'Türkiye / Remote',
+        'stat.focus':          'Odak Alanı',
+        'skills.label':        'Teknolojiler',
+        'skills.title':        'Yetkinlikler',
+        'exp.label':           'Kariyer',
+        'exp.title':           'Deneyim',
+        'exp.qubitrium.role':  'FPGA / Embedded Engineer · Satellite QKD',
+        'exp.qubitrium.desc':  'Uydu QKD platformu için RTL tasarımı, zaman damgası işleme ve gömülü yazılım geliştirme.',
+        'exp.tubitak.period':  'Proje',
+        'exp.tubitak.role':    'Araştırma · Kuantum İletişim',
+        'exp.tubitak.desc':    "Türkiye'nin uydu tabanlı kuantum iletişim altyapısına yönelik AR-GE çalışmaları.",
+        'exp.collab.period':   'İşbirliği',
+        'exp.collab.role':     'Uluslararası Uzay Teknolojileri Ortakları',
+        'exp.collab.desc':     'QKD payload entegrasyonu ve doğrulama testleri kapsamında ortak çalışma.',
+        'edu.label':           'Akademik',
+        'edu.title':           'Eğitim',
+        'edu.uni':             'Özyeğin Üniversitesi',
+        'edu.dept':            'Elektrik-Elektronik Mühendisliği',
+        'edu.thesis':          'Mezuniyet Tezi',
+        'proj.label':          'Seçilmiş İşler',
+        'proj.title':          'Projeler',
+        'proj.purple':         "QKD sistemleri için yüksek hassasiyetli zaman damgası işleme C++ framework'ü.",
+        'proj.tdc':            'Mezuniyet tezi: Time-to-Digital Converter ASIC tasarımı ve doğrulaması.',
+        'proj.aes':            'Zynq SoC üzerinde donanımsal AES-256 şifreleme RTL implementasyonu.',
+        'proj.tag.thesis':     'Tez',
+        'contact.label':       'İletişim',
+        'contact.title':       'Birlikte çalışalım.',
+        'contact.desc':        'FPGA, gömülü sistem veya kuantum iletişim alanlarında bir projeniz mi var? Mesaj atmaktan çekinmeyin.',
+        'contact.email':       'E-posta',
+        'contact.phone':       'Telefon',
+        'cv.label':            'Belge',
+        'cv.title':            'CV',
+        'cv.desc':             'Tüm deneyim, projeler ve yetkinliklerin bulunduğu detaylı PDF.',
+        'cv.button':           'PDF İndir',
+        'footer.text':         'Tüm hakları saklıdır.'
+      },
+      en: {
+        'nav.contact':         'Contact',
+        'hero.available':      'Open to new opportunities',
+        'hero.title':          'FPGA & Embedded Systems Engineer',
+        'hero.desc':           'I work on satellite-based Quantum Key Distribution (QKD), high-speed digital design, and embedded systems. Experienced in RTL design with Verilog/VHDL, Zynq SoC integration, and C++ timestamp processing.',
+        'hero.cv':             'Download CV',
+        'hero.contact':        'Get in touch',
+        'stat.location':       'Location',
+        'stat.locationSub':    'Türkiye / Remote',
+        'stat.focus':          'Focus Area',
+        'skills.label':        'Technologies',
+        'skills.title':        'Skills',
+        'exp.label':           'Career',
+        'exp.title':           'Experience',
+        'exp.qubitrium.role':  'FPGA / Embedded Engineer · Satellite QKD',
+        'exp.qubitrium.desc':  'RTL design, timestamp processing and embedded software development for satellite QKD platform.',
+        'exp.tubitak.period':  'Project',
+        'exp.tubitak.role':    'Research · Quantum Communication',
+        'exp.tubitak.desc':    "R&D efforts toward Türkiye's satellite-based quantum communication infrastructure.",
+        'exp.collab.period':   'Collaboration',
+        'exp.collab.role':     'International Space Technology Partners',
+        'exp.collab.desc':     'Joint work on QKD payload integration and verification testing.',
+        'edu.label':           'Academic',
+        'edu.title':           'Education',
+        'edu.uni':             'Özyeğin University',
+        'edu.dept':            'Electrical and Electronics Engineering',
+        'edu.thesis':          'Graduation Thesis',
+        'proj.label':          'Selected Work',
+        'proj.title':          'Projects',
+        'proj.purple':         'High-precision timestamp processing C++ framework for QKD systems.',
+        'proj.tdc':            'Graduation thesis: Time-to-Digital Converter ASIC design and verification.',
+        'proj.aes':            'Hardware AES-256 encryption RTL implementation on Zynq SoC.',
+        'proj.tag.thesis':     'Thesis',
+        'contact.label':       'Contact',
+        'contact.title':       "Let's work together.",
+        'contact.desc':        'Have a project in FPGA, embedded systems or quantum communication? Feel free to reach out.',
+        'contact.email':       'Email',
+        'contact.phone':       'Phone',
+        'cv.label':            'Document',
+        'cv.title':            'Resume',
+        'cv.desc':             'Detailed PDF with all experience, projects and skills.',
+        'cv.button':           'Download PDF',
+        'footer.text':         'All rights reserved.'
+      }
+    };
+  </script>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       [15] APP LOGIC — Dil değiştirme + bilgi enjeksiyonu
+       ════════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      'use strict';
+
+      // -------- Debug yardımcıları --------
+      const log = (...args) => { if (CONFIG.debug) console.log('[portfolio]', ...args); };
+      const warn = (...args) => console.warn('[portfolio]', ...args);
+
+      // -------- DOM hazır olunca çalış --------
+      document.addEventListener('DOMContentLoaded', init);
+
+      function init() {
+        log('init başladı', { config: CONFIG });
+
+        applyConfig();
+        setupLangToggle();
+        setYear();
+        if (CONFIG.debug) document.body.classList.add('debug');
+
+        log('init tamamlandı');
+      }
+
+      // -------- CONFIG verilerini DOM'a uygula --------
+      function applyConfig() {
+        // CV linki
+        const cvBtn = document.getElementById('cv-download-btn');
+        if (cvBtn) {
+          cvBtn.setAttribute('href', CONFIG.cvFile);
+          cvBtn.setAttribute('download', CONFIG.cvSaveAs);
+          log('CV linki ayarlandı:', CONFIG.cvFile);
+        } else {
+          warn('cv-download-btn bulunamadı');
+        }
+
+        // E-posta
+        const emailLink = document.getElementById('contact-email-link');
+        const emailText = document.getElementById('contact-email-text');
+        if (emailLink) emailLink.setAttribute('href', 'mailto:' + CONFIG.email);
+        if (emailText) emailText.textContent = CONFIG.email;
+
+        // Telefon
+        const phoneLink = document.getElementById('contact-phone-link');
+        const phoneText = document.getElementById('contact-phone-text');
+        if (phoneLink) phoneLink.setAttribute('href', 'tel:' + CONFIG.phoneRaw);
+        if (phoneText) phoneText.textContent = CONFIG.phone;
+      }
+
+      // -------- Yıl --------
+      function setYear() {
+        const el = document.getElementById('footer-year');
+        if (el) el.textContent = new Date().getFullYear();
+      }
+
+      // -------- Dil değiştirme --------
+      let currentLang = CONFIG.defaultLang;
+
+      function applyLang(lang) {
+        if (!I18N[lang]) {
+          warn('Bilinmeyen dil:', lang);
+          return;
+        }
+        currentLang = lang;
+        document.documentElement.setAttribute('lang', lang);
+
+        const dict = I18N[lang];
+        const nodes = document.querySelectorAll('[data-i18n]');
+        let missing = 0;
+
+        nodes.forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key] !== undefined) {
+            el.textContent = dict[key];
+          } else {
+            missing++;
+            warn('Çeviri eksik:', lang, '→', key);
+          }
+        });
+
+        const label = document.getElementById('langLabel');
+        if (label) label.textContent = lang === 'tr' ? 'EN' : 'TR';
+
+        log(`Dil değişti → ${lang} (${nodes.length} eleman, ${missing} eksik)`);
+      }
+
+      function setupLangToggle() {
+        const btn = document.getElementById('langToggle');
+        if (!btn) { warn('langToggle bulunamadı'); return; }
+        btn.addEventListener('click', () => {
+          applyLang(currentLang === 'tr' ? 'en' : 'tr');
+        });
+        applyLang(CONFIG.defaultLang);
+      }
+
+      // -------- Konsol yardımcısı (test için) --------
+      // Konsola yazıp çağırabilirsin: window.__portfolio.setLang('en')
+      window.__portfolio = {
+        setLang: applyLang,
+        get config() { return CONFIG; },
+        get lang() { return currentLang; }
+      };
+    })();
+  </script>
 </body>
 </html>
